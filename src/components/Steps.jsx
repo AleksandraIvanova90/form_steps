@@ -4,7 +4,7 @@ import StoredData  from "./StoredData.jsx"
 
 function Steps() {
     
-    const [content, setContent] = useState(null)
+    const [content, setContent] = useState([])
     
 
     const dataTransfer = (event) => {
@@ -20,36 +20,33 @@ function Steps() {
             alert('Неверный формат даты!')
             return
         } else {
-            
-        const listDates = []
-           const content = document.querySelector('.stored-data__content')
-           const dates = Array.from(content.children)
-           dates.forEach((data) => {
-            listDates.push(
-                {
-                date: data.children[0].textContent,
-                distance: data.children[1].textContent
+            const listDates = []
+             if (content.length === 0) {
+                listDates.push({
+                    date: data.date,
+                    distance: data.distance
+                })
+            } else {
+                content.forEach((data) => {
+                    listDates.push(data)
                 }
             )
-           })
-        
-    
-        let count = 0
-        listDates.forEach((num) => {
-            console.log(num)
-            if (num['date'] === data.date) {
-                num.distance = Number(num.distance) + Number(data.distance)
-                count +=1
-            } 
-        })
-
-        if (count === 0) {
+            let count = 0
+                listDates.forEach((num) => {
+                    if (num['date'] === data.date) {
+                        num.distance = Number(num.distance) + Number(data.distance)
+                        count +=1
+                    } 
+                })
+                 if (count === 0) {
             listDates.push({
                 date: data.date,
                 distance: data.distance
             })
         }
-
+            
+            }
+        
         listDates.sort((a, b) => {
         const parseDate = (dateStr) => {
             const parts = dateStr.split('.'); 
@@ -72,7 +69,21 @@ function Steps() {
         return data
     }
 
-    
+    const deleteItem = (event, dt) => {
+        event.preventDefault()
+        let list = content
+        if (event.target.className.includes('close-content')) {
+            const element = event.target.parentElement.parentElement
+            list.forEach((data) => {
+                    if (data['date'] === dt) {
+                    let indexElement = list.findIndex(date => date.date == element)
+                list.splice(indexElement, 1)
+                
+                    }
+            })
+        setContent(list)
+        }
+    } 
 
     return (
         <div className="steps-container">
@@ -89,7 +100,7 @@ function Steps() {
                     <button className="initial-data__button_btn">OK</button>
                 </div>
             </form>
-            <StoredData content={content} />
+            <StoredData content={content} deleteItem={deleteItem} />
         </div>
     )
 }

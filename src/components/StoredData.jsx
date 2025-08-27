@@ -1,8 +1,7 @@
 function StoredData(props) {
     const content = props.content
     
-    
-    if(content === null) {
+    if(content.length === 0) {
         return (
         <div className="stored-data">
                 <div className="stored-data__name">
@@ -16,20 +15,14 @@ function StoredData(props) {
             </div>
     )
     } else {
-        const deleteItem = (event) => {
-        event.preventDefault()
-        if (event.target.className.includes('close-content')) {
-            const element = event.target.parentElement.parentElement
-            element.remove()
-        }
-    } 
+        
         const list = content.map((intelligence) => 
-                        <div className="stored-data__content__data">
+                        <div key={intelligence.date.toString()} className="stored-data__content__data">
                             <div className="stored-data__content__data__date">{intelligence.date}</div>
                             <div className="stored-data__content__data__distance">{intelligence.distance}</div>
                             <div className="stored-data__content__data__actions">
                                 <span>&#9998;</span>
-                                <span className="close-content" onClick={deleteItem}>&#10006;</span>
+                                <span className="close-content" onClick={evt =>props.deleteItem(evt, intelligence.date)}>&#10006;</span>
                             </div>
                         </div>)
     
@@ -45,9 +38,7 @@ function StoredData(props) {
                     {list}
                     </>
                 </div>
-                   
-        
-                   
+                      
         </div>
     )
     }
