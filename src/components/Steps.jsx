@@ -71,18 +71,7 @@ function Steps() {
 
     const deleteItem = (event, dt) => {
         event.preventDefault()
-        let list = content
-        if (event.target.className.includes('close-content')) {
-            const element = event.target.parentElement.parentElement
-            list.forEach((data) => {
-                    if (data['date'] === dt) {
-                    let indexElement = list.findIndex(date => date.date == element)
-                list.splice(indexElement, 1)
-                
-                    }
-            })
-        setContent(list)
-        }
+        setContent(prev => prev.filter(item => item.date !== dt));
     } 
 
     return (
